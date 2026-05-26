@@ -1,0 +1,200 @@
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 4px 0 20px;
+  text-align: center;
+}
+
+.layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.goban {
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  flex: 0 0 auto;
+}
+
+.panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: #2a313d;
+  border: 1px solid #3a4250;
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.card h2 {
+  font-size: 15px;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+
+/* status */
+.turn,
+.result {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.turn.thinking {
+  color: #ffcf6b;
+}
+
+.result {
+  color: #6bd49a;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+
+.dot.black {
+  background: #111;
+}
+
+.dot.white {
+  background: #fff;
+}
+
+.winbar {
+  height: 12px;
+  background: #f1f1f1;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0 4px;
+}
+
+.winbar-black {
+  height: 100%;
+  background: #15181d;
+  transition: width 0.4s ease;
+}
+
+.winrow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #aab2c0;
+}
+
+.meta {
+  margin: 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.meta dt {
+  color: #8b94a3;
+}
+
+.meta dd {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+/* controls */
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.controls button {
+  flex: 1;
+}
+
+/* setup */
+.setup label {
+  display: block;
+  font-size: 12px;
+  color: #8b94a3;
+  margin: 10px 0 5px;
+}
+
+.choices {
+  display: flex;
+  gap: 6px;
+}
+
+.choices button {
+  flex: 1;
+  text-transform: capitalize;
+}
+
+button {
+  background: #3a4250;
+  color: #e8eaed;
+  border: 1px solid #4a5464;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #46505f;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+button.sel {
+  background: #4f7fff;
+  border-color: #4f7fff;
+  color: #fff;
+}
+
+button.primary {
+  width: 100%;
+  margin-top: 14px;
+  background: #4f7fff;
+  border-color: #4f7fff;
+  color: #fff;
+  font-weight: 600;
+  padding: 10px;
+}
+
+button.danger {
+  border-color: #7a3b3b;
+}
+
+button.danger:hover:not(:disabled) {
+  background: #5e2f2f;
+}
+
+.error {
+  background: #4a2f2f;
+  border-color: #7a3b3b;
+  color: #ffb4b4;
+  font-size: 13px;
+}

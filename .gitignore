@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+._*
+
+# Logs
+*.log
+analysis_logs/
+backend/analysis_logs/
+
+# Python backend
+backend/venv/
+backend/.venv/
+backend/__pycache__/
+backend/**/*.py[cod]
+backend/.pytest_cache/
+backend/.mypy_cache/
+
+# Frontend workspace-level artifacts
+frontend/node_modules/
+frontend/dist/
+frontend/dist-ssr/
+
+# Editors
+.vscode/
+.idea/
