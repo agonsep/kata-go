@@ -69,6 +69,21 @@ class Game:
         self.last_move = None
         self.black_winrate = None
         self.black_score = None
+        self.history = []  # board snapshot after each move, for review
+        self.snapshot()
+
+    def snapshot(self):
+        """Record the current board position for game review/navigation."""
+        self.history.append({
+            "board": self.goban.as_list(),
+            "lastMove": self.last_move,
+            "captures": {
+                "black": self.goban.captures[BLACK],
+                "white": self.goban.captures[WHITE],
+            },
+            "toMove": _color_name(self.current),
+            "moveNumber": len(self.moves),
+        })
 
     def katago_moves(self):
         out = []
@@ -103,6 +118,7 @@ class Game:
             blackScoreLead=self.black_score,
             aiLevel=self.ai_level,
             komi=self.komi,
+            history=self.history,
         )
 
 
@@ -160,8 +176,48 @@ async def _ai_turn(game: Game):
         game.last_move = {"x": x, "y": y}
 
     game.current = game.human_color
+    game.snapshot()
     if game.double_pass():
         await _score_game(game)
+
+
+def _undo(game: Game) -> bool:
+    """Roll back the human's last turn (their move plus the AI's reply).
+
+    Rebuilds the board authoritatively by replaying the truncated move list so
+    captures and ko are recomputed correctly. Returns False if there is nothing
+    of the human's to undo.
+    """
+    moves = list(game.moves)
+    removed_human = False
+    while moves:
+        color, _x, _y = moves.pop()
+        if color == game.human_color:
+            removed_human = True
+            break
+    if not removed_human:
+        return False
+
+    board = Goban(game.board_size)
+    last = None
+    for color, x, y in moves:
+        if x is None:
+            board.play_pass()
+            last = {"pass": True}
+        else:
+            board.play(color, x, y)
+            last = {"x": x, "y": y}
+
+    game.goban = board
+    game.moves = moves
+    game.last_move = last
+    game.current = BLACK if len(moves) % 2 == 0 else WHITE  # Black always starts
+    game.status = "playing"
+    game.result = None
+    game.black_winrate = None
+    game.black_score = None
+    game.history = game.history[: len(moves) + 1]
+    return True
 
 
 def _get_game(game_id: str) -> Game:
@@ -208,6 +264,7 @@ async def play_move(game_id: str, req: MoveRequest):
     game.moves.append((game.human_color, req.x, req.y))
     game.last_move = {"x": req.x, "y": req.y}
     game.current = game.ai_color
+    game.snapshot()
     try:
         await _ai_turn(game)
     except KataGoError as e:
@@ -226,6 +283,7 @@ async def pass_move(game_id: str):
     game.moves.append((game.human_color, None, None))
     game.last_move = {"pass": True}
     game.current = game.ai_color
+    game.snapshot()
     try:
         if game.double_pass():
             await _score_game(game)
@@ -243,6 +301,14 @@ async def resign(game_id: str):
         raise HTTPException(409, "game is over")
     game.status = "finished"
     game.result = f"{_color_name(game.ai_color).capitalize()} wins by resignation"
+    return game.state()
+
+
+@app.post("/api/games/{game_id}/undo", response_model=GameState)
+async def undo_move(game_id: str):
+    game = _get_game(game_id)
+    if not _undo(game):
+        raise HTTPException(409, "nothing to undo")
     return game.state()
 
 

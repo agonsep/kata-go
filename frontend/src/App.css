@@ -19,10 +19,52 @@ h1 {
   justify-content: center;
 }
 
+.boardcol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
 .goban {
   border-radius: 6px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  flex: 0 0 auto;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2a313d;
+  border: 1px solid #3a4250;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.nav button {
+  min-width: 40px;
+  padding: 6px 8px;
+}
+
+.nav button.live {
+  min-width: auto;
+}
+
+.navlabel {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  color: #aab2c0;
+  font-variant-numeric: tabular-nums;
+}
+
+.nav.reviewing {
+  border-color: #4f7fff;
+}
+
+.nav.reviewing .navlabel {
+  color: #8fb0ff;
+  font-weight: 600;
 }
 
 .panel {

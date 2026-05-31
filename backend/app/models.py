@@ -35,6 +35,7 @@ class GameState(BaseModel):
     blackScoreLead: Optional[float] = None  # points, Black's perspective
     aiLevel: str
     komi: float
+    history: list[dict] = []
 
 
 class HintResponse(BaseModel):

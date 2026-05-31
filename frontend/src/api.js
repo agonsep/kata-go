@@ -24,6 +24,7 @@ export const api = {
       body: JSON.stringify({ x, y }),
     }),
   pass: (id) => request(`/games/${id}/pass`, { method: 'POST' }),
+  undo: (id) => request(`/games/${id}/undo`, { method: 'POST' }),
   resign: (id) => request(`/games/${id}/resign`, { method: 'POST' }),
   hint: (id) => request(`/games/${id}/hint`, { method: 'POST' }),
 }
